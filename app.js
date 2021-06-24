@@ -1,9 +1,12 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const cors = require('cors');
+const cookieParser = require('cookie-parser')
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cookieParser())
 
 let movies = [
                 {
@@ -80,6 +83,26 @@ app.delete('/movies/:id', (req, res) => {
 
     console.log(movies)
     res.status(200).send('you deleted a movie')
+})
+
+app.post('/setCookies', (req, res) => {
+    
+
+    let key = Object.keys(req.body)[0]
+    let value = req.body[key]
+
+    console.log(key)
+    console.log(value)
+    res.cookie([key],[value]) // this actually sets a new cookie
+
+    res.send(req.cookies)
+
+
+   // res.send('you tried to set the cookies')
+})
+
+app.get('/readCookies', (req, res) => {
+    res.send(req.cookies)
 })
 
 const port = 3001
